@@ -33,6 +33,11 @@ from pathlib import Path
 import json
 import os
 import sys
+import logging
+
+# Configuração do Logger
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 # ============================================================================
 # SETUP DO STOCKFISH (CROSS-PLATFORM - Linux/Windows)
@@ -106,7 +111,7 @@ try:
         st.warning("⚠️ Stockfish não foi encontrado. A análise com motor pode não funcionar. "
                    "Isso é esperado em certos ambientes.")
 except Exception as e:
-    logger.error(f"❌ Erro ao inicializar Stockfish: {str(e)}")
+    st.error(f"⚠️ Erro ao inicializar Stockfish: {e}")
     st.warning(f"⚠️ Erro ao inicializar Stockfish: {str(e)}")
 
 # ============================================================================
@@ -114,9 +119,13 @@ except Exception as e:
 # ============================================================================
 
 try:
-    from src.chess_data_fetcher import ChessDataFetcher, Platform, TimeControl
-    from src.chess_profiler import ChessProfiler
-    from src.player_dna import PlayerDNA, GrandmasterAnalyzer
+   # Mude de: from src.chess_data_fetcher...
+# Para:
+try:
+    from chess_data_fetcher import ChessDataFetcher, Platform, TimeControl
+    from chess_profiler import ChessProfiler
+    from player_dna import PlayerDNA, GrandmasterAnalyzer
+    from componentes_premium import PaletaCores
     from componentes_premium import PaletaCores
 except ImportError as e:
     st.error(f"❌ Erro ao importar módulos essenciais: {str(e)}")
@@ -1148,3 +1157,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

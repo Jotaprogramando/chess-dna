@@ -27,7 +27,7 @@ seaborn>=0.12.0
 # CHESS ANALYSIS & ENGINE
 # ============================================================================
 python-chess>=1.10.0
-stockfish>=16.0
+stockfish
 
 # ============================================================================
 # MACHINE LEARNING
@@ -88,3 +88,4 @@ python-daemon>=2.3.2
 # 4. Versões pinadas podem ser ajustadas conforme necessário
 # 5. Para Heroku, use Procfile para iniciar a aplicação
 # ============================================================================
+

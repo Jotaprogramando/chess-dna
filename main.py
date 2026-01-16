@@ -119,29 +119,19 @@ except Exception as e:
 # ============================================================================
 
 try:
-   # Mude de: from src.chess_data_fetcher...
-# Para:
-try:
     from chess_data_fetcher import ChessDataFetcher, Platform, TimeControl
     from chess_profiler import ChessProfiler
     from player_dna import PlayerDNA, GrandmasterAnalyzer
     from componentes_premium import PaletaCores
-    from componentes_premium import PaletaCores
 except ImportError as e:
     st.error(f"❌ Erro ao importar módulos essenciais: {str(e)}")
-    st.info("Certifique-se de que os módulos estão no mesmo diretório")
+    st.info("Certifique-se de que os arquivos .py extras foram subidos para a raiz do GitHub.")
     st.stop()
-
 # ============================================================================
 # CONFIGURAÇÃO INICIAL
 # ============================================================================
 
 # Setup de logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
 
 # Setup do Streamlit
 st.set_page_config(
@@ -1157,4 +1147,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 

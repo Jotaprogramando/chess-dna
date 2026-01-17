@@ -101,10 +101,23 @@ try:
     if STOCKFISH_PATH:
         os.environ['STOCKFISH_PATH'] = STOCKFISH_PATH
         logger.info(f"Stockfish setado para: {STOCKFISH_PATH}")
-    else:
-        logger.warning("⚠️ Stockfish não encontrado - alguns recursos podem não funcionar")
-        st.warning("⚠️ Stockfish não foi encontrado. A análise com motor pode não funcionar. "
-                   "Isso é esperado em certos ambientes.")
+  # Inicializar Stockfish no startup
+STOCKFISH_PATH = encontrar_stockfish()
+
+# Se não encontrou automaticamente, tentamos o caminho padrão do Streamlit Linux
+if not STOCKFISH_PATH:
+    if os.path.exists("/usr/games/stockfish"):
+        STOCKFISH_PATH = "/usr/games/stockfish"
+    elif os.path.exists("/usr/bin/stockfish"):
+        STOCKFISH_PATH = "/usr/bin/stockfish"
+
+if STOCKFISH_PATH:
+    os.environ['STOCKFISH_PATH'] = STOCKFISH_PATH
+    logger.info(f"Stockfish configurado em: {STOCKFISH_PATH}")
+    # Removemos o st.warning daqui para a mensagem sumir!
+else:
+    # Só mostra o aviso se realmente todas as tentativas falharem
+    st.warning("⚠️ O motor de análise está carregando. Se persistir, a análise detalhada pode ser limitada.")
 except Exception as e:
     st.error(f"⚠️ Erro ao inicializar Stockfish: {e}")
     st.warning(f"⚠️ Erro ao inicializar Stockfish: {str(e)}")
@@ -1142,6 +1155,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 

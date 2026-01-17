@@ -94,47 +94,28 @@ def encontrar_stockfish() -> Optional[str]:
     logger.warning("❌ Stockfish não foi encontrado em nenhuma estratégia")
     return None
 
-# Inicializar Stockfish no startup
+# ==============================================================================
+# INICIALIZAÇÃO DO MOTOR (STARTUP)
+# ==============================================================================
 STOCKFISH_PATH = None
 try:
     STOCKFISH_PATH = encontrar_stockfish()
+
+    # Se não encontrou automaticamente, tenta caminhos padrão do Streamlit Cloud
+    if not STOCKFISH_PATH:
+        for caminho in ["/usr/games/stockfish", "/usr/bin/stockfish"]:
+            if os.path.exists(caminho):
+                STOCKFISH_PATH = caminho
+                break
+
     if STOCKFISH_PATH:
         os.environ['STOCKFISH_PATH'] = STOCKFISH_PATH
-        logger.info(f"Stockfish setado para: {STOCKFISH_PATH}")
- # Inicializar Stockfish no startup
-STOCKFISH_PATH = encontrar_stockfish()
+        logger.info(f"✅ Stockfish configurado em: {STOCKFISH_PATH}")
+    else:
+        st.info("ℹ️ O motor de análise está carregando ou não foi detectado. Algumas análises podem ser limitadas.")
 
-# Se não encontrou automaticamente, tentamos o caminho padrão do Streamlit Linux
-if not STOCKFISH_PATH:
-    if os.path.exists("/usr/games/stockfish"):
-        STOCKFISH_PATH = "/usr/games/stockfish"
-    elif os.path.exists("/usr/bin/stockfish"):
-        STOCKFISH_PATH = "/usr/bin/stockfish"
-
-if STOCKFISH_PATH:
-    os.environ['STOCKFISH_PATH'] = STOCKFISH_PATH
-    logger.info(f"Stockfish configurado em: {STOCKFISH_PATH}")
-    # Removemos o st.warning daqui para a mensagem sumir!
-else:
-    # Só mostra o aviso se realmente todas as tentativas falharem
-    st.warning("⚠️ O motor de análise está carregando. Se persistir, a análise detalhada pode ser limitada.")
-if not STOCKFISH_PATH:
-    if os.path.exists("/usr/games/stockfish"):
-        STOCKFISH_PATH = "/usr/games/stockfish"
-    elif os.path.exists("/usr/bin/stockfish"):
-        STOCKFISH_PATH = "/usr/bin/stockfish"
-
-if STOCKFISH_PATH:
-    os.environ['STOCKFISH_PATH'] = STOCKFISH_PATH
-    logger.info(f"Stockfish configurado em: {STOCKFISH_PATH}")
-    # Removemos o st.warning daqui para a mensagem sumir!
-else:
-    # Só mostra o aviso se realmente todas as tentativas falharem
-    st.warning("⚠️ O motor de análise está carregando. Se persistir, a análise detalhada pode ser limitada.")
 except Exception as e:
-    st.error(f"⚠️ Erro ao inicializar Stockfish: {e}")
-    st.warning(f"⚠️ Erro ao inicializar Stockfish: {str(e)}")
-
+    logger.error(f"Erro ao inicializar Stockfish: {e}")
 # ============================================================================
 # IMPORTS LOCAIS
 # ============================================================================
@@ -1168,6 +1149,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 

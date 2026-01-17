@@ -44,29 +44,24 @@ logger = logging.getLogger(__name__)
 # ============================================================================
 
 def encontrar_stockfish() -> Optional[str]:
-    # Estratégia 1: Verificar se 'stockfish' está no PATH (Padrão Linux do Streamlit)
+    """Encontra o executável do Stockfish no Streamlit Cloud (Linux) ou Windows."""
+    import shutil
+    import subprocess
+
+    # 1. Estratégia Principal: Verificar se 'stockfish' está no sistema (Linux/Cloud)
     caminho = shutil.which("stockfish")
     if caminho:
         return caminho
-        
-    # Estratégia 2: Caminhos comuns do Windows (caso você rode localmente)
-    # ... resto do código que você já tem ...
-    """
-    import subprocess
-    import shutil
-    
-    # Estratégia 1: Verificar se 'stockfish' está no PATH do sistema
-    # (Funciona em Streamlit Cloud via apt-get e em Linux/macOS)
+
+    # 2. Estratégia Secundária: Tentar comando direto
     try:
-        # Tenta executar 'stockfish --version'
-        result = subprocess.run(['stockfish', '--version'], 
-                              capture_output=True, 
-                              timeout=5)
+        result = subprocess.run(['stockfish', '--version'], capture_output=True, text=True, timeout=2)
         if result.returncode == 0:
-            logger.info("✅ Stockfish encontrado no PATH do sistema")
-            return 'stockfish'  # Retorna apenas 'stockfish', o OS encontrará no PATH
-    except (FileNotFoundError, subprocess.TimeoutExpired):
-        logger.debug("Stockfish não encontrado via PATH")
+            return 'stockfish'
+    except Exception:
+        pass
+
+    return None
     
     # Estratégia 2: Caminhos conhecidos do Windows (desenvolvimento local)
     windows_paths = [
@@ -1147,6 +1142,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
 

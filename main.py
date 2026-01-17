@@ -44,13 +44,13 @@ logger = logging.getLogger(__name__)
 # ============================================================================
 
 def encontrar_stockfish() -> Optional[str]:
-    """
-    Encontra o executável do Stockfish seguindo estratégia em cascata:
-    1. Tenta usar 'stockfish' diretamente (Linux Streamlit Cloud)
-    2. Tenta caminhos locais do Windows
-    3. Tenta importar setup_engine como fallback
-    
-    Retorna o caminho válido ou None.
+    # Estratégia 1: Verificar se 'stockfish' está no PATH (Padrão Linux do Streamlit)
+    caminho = shutil.which("stockfish")
+    if caminho:
+        return caminho
+        
+    # Estratégia 2: Caminhos comuns do Windows (caso você rode localmente)
+    # ... resto do código que você já tem ...
     """
     import subprocess
     import shutil
@@ -1147,5 +1147,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
 
